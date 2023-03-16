@@ -39,7 +39,8 @@ public class ERSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeRequests()
-                .antMatchers("/login","/signup", "/users").permitAll()
+                .antMatchers("/login", "/signup").permitAll()
+                .antMatchers( "/users").authenticated()
                 .and()
                 .formLogin()
                 .and()
