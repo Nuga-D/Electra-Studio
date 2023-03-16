@@ -1,4 +1,4 @@
-package models;
+package com.electra.ElectraRegistrar.models;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,12 +8,22 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "User")
 public class User {
+
+    public User(String firstName, String lastName, String email, String password, String role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
