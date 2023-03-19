@@ -55,7 +55,7 @@ public class ERAuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity registerUser(@RequestBody SignupRequest signupRequest) {
         if (userDetailsServiceImpl.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity.badRequest().body(new ErrorResponse("Username is already taken!"));
         }
@@ -66,4 +66,6 @@ public class ERAuthController {
 
         return ResponseEntity.ok(new SuccessResponse("User registered successfully!"));
     }
+
+
 }
