@@ -38,7 +38,9 @@ public class ERSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
+        return http
+                .cors().and()
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login", "/signup").permitAll()
                 .antMatchers( "/users").permitAll()
@@ -50,6 +52,8 @@ public class ERSecurityConfig {
                 .and()
                 .build();
     }
+
+
 
 
 }

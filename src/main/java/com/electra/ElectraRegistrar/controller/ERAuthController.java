@@ -13,15 +13,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.security.sasl.AuthenticationException;
 import java.util.Date;
 import java.util.List;
 
+@CrossOrigin(origins ="*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @RestController
 public class ERAuthController {
 
@@ -40,6 +38,7 @@ public class ERAuthController {
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
+    @CrossOrigin(origins ="*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginForm) {
         String username = loginForm.getUsername();
@@ -54,6 +53,7 @@ public class ERAuthController {
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
+    @CrossOrigin(origins ="*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/signup")
     public ResponseEntity registerUser(@RequestBody SignupRequest signupRequest) {
         if (userDetailsServiceImpl.existsByEmail(signupRequest.getEmail())) {
