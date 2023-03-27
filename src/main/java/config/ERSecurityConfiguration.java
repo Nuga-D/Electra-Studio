@@ -16,7 +16,8 @@ public class ERSecurityConfiguration {
     SecurityFilterChain defaultSecurityFiletChain(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeHttpRequests()
                 .antMatchers("/register","/users").permitAll()
-                .and().formLogin();
+                .and().httpBasic();
+
 
         return http.build();
 
