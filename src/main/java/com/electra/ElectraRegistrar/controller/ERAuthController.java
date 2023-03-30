@@ -1,6 +1,7 @@
 package com.electra.ElectraRegistrar.controller;
 
 import com.electra.ElectraRegistrar.models.*;
+import com.electra.ElectraRegistrar.repository.RoleRepository;
 import com.electra.ElectraRegistrar.repository.UserRepository;
 import com.electra.ElectraRegistrar.service.JwtTokenProvider;
 import com.electra.ElectraRegistrar.service.UserDetailsServiceImpl;
@@ -17,12 +18,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.security.sasl.AuthenticationException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin(origins ="*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @RestController
 public class ERAuthController {
 
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -38,8 +42,11 @@ public class ERAuthController {
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @CrossOrigin(origins ="*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginForm) {
         String username = loginForm.getUsername();
         String password = loginForm.getPassword();
@@ -48,10 +55,17 @@ public class ERAuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
-        String token = jwtTokenProvider.generateToken((Authentication) userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(token));
+        if (userDetails instanceof User) {
+            User user = (User) userDetails;
+            String token = jwtTokenProvider.generateToken(authentication);
+            return ResponseEntity.ok(new AuthResponse(token));
+        } else {
+            // handle the case where userDetails is not an instance of User
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
 
     @CrossOrigin(origins ="*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/signup")
@@ -61,11 +75,19 @@ public class ERAuthController {
         }
 
         String hashPwd = passwordEncoder.encode(signupRequest.getPassword());
-        User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getRole());
+        Set<Role> roles = new HashSet<>();
+        Role role = roleRepository.findByName(signupRequest.getRole())
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(role);
+        User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, roles);
         userDetailsServiceImpl.save(user);
 
         return ResponseEntity.ok(new SuccessResponse("User registered successfully!"));
     }
 
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 
 }

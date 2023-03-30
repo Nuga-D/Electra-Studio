@@ -8,22 +8,15 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "User")
 public class User {
-
-    public User(String firstName, String lastName, String email, String password, String role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
@@ -51,9 +44,22 @@ public class User {
     private String dateCreated;
 
 //    @NotEmpty(message = "User's role cannot be empty.")
-    private String role;
+@ManyToMany(fetch = FetchType.LAZY)
+@JoinTable(name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id"))
+private Set<Role> roles = new HashSet<>();
 
-//    @Builder.Default
+    public User(String firstName, String lastName, String email, String password, Set<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+
+    //    @Builder.Default
 //    private Boolean disabled = false;
 
     public Long getId() {
@@ -104,14 +110,13 @@ public class User {
         this.dateCreated = dateCreated;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
-
 //    public Boolean getDisabled() {
 //        return disabled;
 //    }
