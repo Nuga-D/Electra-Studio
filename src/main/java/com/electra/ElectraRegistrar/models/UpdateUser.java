@@ -1,19 +1,14 @@
 package com.electra.ElectraRegistrar.models;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+public class UpdateUser {
 
-import java.util.Set;
-
-public class SignupRequest {
     private String email;
-    private String password;
 
     private String firstName;
 
     private String lastName;
 
-    private String role;
+    private String roles;
 
     public String getEmail() {
         return email;
@@ -21,14 +16,6 @@ public class SignupRequest {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {
@@ -48,10 +35,10 @@ public class SignupRequest {
     }
 
     public String getRole() {
-        return role;
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRole(String roles) {
+        this.roles = roles;
     }
 }

@@ -3,6 +3,7 @@ package com.electra.ElectraRegistrar.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,15 +25,20 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private int jwtExpiration;
 
-
-    private UserDetails userDetails;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
 
 
     public String generateToken(Authentication authentication) {
         // ...
 
-        String username = userDetails.getUsername();
+        //UserDetails userDetails = (UserDetails) authentication.getDetails();
+        //UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
+
+        //String username = userDetails.getUsername();
+
+        String username = authentication.getName();
         Claims claims = Jwts.claims().setSubject(username);
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + jwtExpiration * 1000);

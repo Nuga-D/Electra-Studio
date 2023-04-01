@@ -22,8 +22,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin(origins ="*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @RestController
+@RequestMapping("/auth")
 public class ERAuthController {
 
     @Autowired
@@ -31,9 +32,6 @@ public class ERAuthController {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -45,7 +43,7 @@ public class ERAuthController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @CrossOrigin(origins ="*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
+    @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/signin")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginForm) {
         String username = loginForm.getUsername();
@@ -54,20 +52,14 @@ public class ERAuthController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
+        //UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
 
-        if (userDetails instanceof User) {
-            User user = (User) userDetails;
-            String token = jwtTokenProvider.generateToken(authentication);
-            return ResponseEntity.ok(new AuthResponse(token));
-        } else {
-            // handle the case where userDetails is not an instance of User
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        String token = jwtTokenProvider.generateToken(authentication);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 
 
-    @CrossOrigin(origins ="*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
+    @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/signup")
     public ResponseEntity registerUser(@RequestBody SignupRequest signupRequest) {
         if (userDetailsServiceImpl.existsByEmail(signupRequest.getEmail())) {
@@ -85,9 +77,5 @@ public class ERAuthController {
         return ResponseEntity.ok(new SuccessResponse("User registered successfully!"));
     }
 
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
 }

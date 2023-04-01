@@ -15,13 +15,13 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    @PostMapping("/")
+    @PostMapping("/addRole")
     public ResponseEntity<Role> addRole(@RequestBody Role role) {
         Role savedRole = roleService.addRole(role);
         return ResponseEntity.ok(savedRole);
     }
 
-    @GetMapping("/")
+    @GetMapping("/getRoles")
     public ResponseEntity<List<Role>> getAllRoles() {
         List<Role> roles = roleService.getAllRoles();
         return ResponseEntity.ok(roles);

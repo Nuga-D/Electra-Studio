@@ -11,11 +11,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
-    @Query(value = "SELECT u FROM User u where u.role like %:role%")
-    List<User> findByRole(String role);
-
-    @Query(value = "SELECT u FROM User u where u.email like %:email%")
-    List<User> findByMail(String email);
-
     boolean existsByEmail(String email);
+
 }

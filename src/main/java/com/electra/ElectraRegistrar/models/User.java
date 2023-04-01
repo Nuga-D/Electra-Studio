@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "User")
+@Table(name = "Users")
 public class User {
 
     @Id
@@ -41,9 +44,12 @@ public class User {
     private String password;
 
     @Column(name = "date_created")
-    private String dateCreated;
+    @CreationTimestamp
+    private LocalDateTime dateCreated;
 
-//    @NotEmpty(message = "User's role cannot be empty.")
+
+
+    //    @NotEmpty(message = "User's role cannot be empty.")
 @ManyToMany(fetch = FetchType.LAZY)
 @JoinTable(name = "user_roles",
         joinColumns = @JoinColumn(name = "user_id"),
@@ -102,11 +108,11 @@ private Set<Role> roles = new HashSet<>();
         this.password = password;
     }
 
-    public String getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
