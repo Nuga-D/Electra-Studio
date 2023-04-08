@@ -1,5 +1,6 @@
 package com.electra.ElectraRegistrar.service;
 
+import com.electra.ElectraRegistrar.models.Company;
 import com.electra.ElectraRegistrar.models.User;
 import com.electra.ElectraRegistrar.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -43,7 +44,8 @@ public class JwtTokenProvider {
        String firstName = user.getFirstName();
        String lastName = user.getLastName();
        String email = user.getEmail();
-       String companyName = user.getCompanyName();
+       Company company = user.getCompany();
+       String companyName = company.getName();
 
 
         Claims claims = Jwts.claims().setSubject(username);

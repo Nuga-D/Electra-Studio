@@ -3,6 +3,7 @@ package com.electra.ElectraRegistrar.controller;
 import com.electra.ElectraRegistrar.models.*;
 import com.electra.ElectraRegistrar.repository.RoleRepository;
 import com.electra.ElectraRegistrar.repository.UserRepository;
+import com.electra.ElectraRegistrar.service.CompanyService;
 import com.electra.ElectraRegistrar.service.JwtTokenProvider;
 import com.electra.ElectraRegistrar.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class ERAuthController {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private CompanyService companyService;
+
     @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/signin")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginForm) {
@@ -60,19 +64,44 @@ public class ERAuthController {
     @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/signup")
     public ResponseEntity registerUser(@RequestBody SignupRequest signupRequest) {
-        if (userDetailsServiceImpl.existsByEmail(signupRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Username is already taken!"));
-        }
+        Company company = signupRequest.getCompany();
+
+        String companyName = company.getName();
+
+        String companyAddress = company.getAddress();
+
+        String companyRegNo = company.getRegistrationNumber();
+
+        String companyTaxID = company.getTaxID();
+
+        String companyRepPhoneNo = company.getRepresentativePhoneNo();
 
         String hashPwd = passwordEncoder.encode(signupRequest.getPassword());
+
         Set<Role> roles = new HashSet<>();
+
         Role role = roleRepository.findByName(signupRequest.getRole())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        roles.add(role);
-        User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), signupRequest.getCompanyName(), signupRequest.getCompanyAddress(), signupRequest.getCompanyRegistrationNumber(), signupRequest.getCompanyTaxID(), signupRequest.getCompanyRepPhoneNumber(), roles);
-        userDetailsServiceImpl.save(user);
 
-        return ResponseEntity.ok(new SuccessResponse("User registered successfully!"));
+        roles.add(role);
+
+        if (userDetailsServiceImpl.existsByEmail(signupRequest.getEmail())) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("Username is already taken!"));
+        } else if (companyService.companyExists(companyName)) {
+            // company already exists, create user with existing company
+            Company existingCompany = companyService.findByName(companyName).get();
+            User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), existingCompany, roles);
+            userDetailsServiceImpl.save(user);
+            return ResponseEntity.ok(new SuccessResponse("User registered successfully"));
+        } else {
+            // company does not exist, create new company and user
+            Company newCompany = new Company(companyName, companyAddress, companyRegNo, companyTaxID, companyRepPhoneNo);
+            companyService.saveCompany(newCompany);
+            User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), newCompany, roles);
+            userDetailsServiceImpl.save(user);
+            return ResponseEntity.ok(new SuccessResponse("User and company registered successfully"));
+        }
+
     }
 
 

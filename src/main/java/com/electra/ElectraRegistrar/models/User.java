@@ -24,6 +24,19 @@ import java.util.Set;
 @Table(name = "Users")
 public class User {
 
+    public User(String firstName, String lastName, String email, String password, String homeAddress, String phoneNumber, String NIN, Company company, Set<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.homeAddress = homeAddress;
+        this.phoneNumber = phoneNumber;
+        this.NIN =NIN;
+        this.roles = roles;
+        this.company = company;
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -41,16 +54,6 @@ public class User {
     private String phoneNumber;
 
     private String NIN;
-
-    private String companyName;
-
-    private String companyAddress;
-
-    private String companyRegistrationNumber;
-
-    private String companyTaxID;
-
-    private String companyRepPhoneNumber;
 
     @NotEmpty(message = "User's email cannot be empty.")
     @Email(message = "Please enter a valid Email Address")
@@ -74,22 +77,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public User(String firstName, String lastName, String email, String password, String homeAddress, String phoneNumber, String NIN, String companyName, String companyAddress, String companyRegistrationNumber, String companyTaxID, String companyRepPhoneNumber, Set<Role> roles) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.homeAddress = homeAddress;
-        this.phoneNumber = phoneNumber;
-        this.NIN =NIN;
-        this.companyName = companyName;
-        this.companyAddress = companyAddress;
-        this.companyRegistrationNumber = companyRegistrationNumber;
-        this.companyTaxID = companyTaxID;
-        this.companyRepPhoneNumber = companyRepPhoneNumber;
-        this.roles = roles;
-
-    }
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
 
 //    @Builder.Default
@@ -183,43 +173,11 @@ public class User {
         this.NIN = NIN;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getCompanyAddress() {
-        return companyAddress;
-    }
-
-    public void setCompanyAddress(String companyAddress) {
-        this.companyAddress = companyAddress;
-    }
-
-    public String getCompanyRegistrationNumber() {
-        return companyRegistrationNumber;
-    }
-
-    public void setCompanyRegistrationNumber(String companyRegistrationNumber) {
-        this.companyRegistrationNumber = companyRegistrationNumber;
-    }
-
-    public String getCompanyTaxID() {
-        return companyTaxID;
-    }
-
-    public void setCompanyTaxID(String companyTaxID) {
-        this.companyTaxID = companyTaxID;
-    }
-
-    public String getCompanyRepPhoneNumber() {
-        return companyRepPhoneNumber;
-    }
-
-    public void setCompanyRepPhoneNumber(String companyRepPhoneNumber) {
-        this.companyRepPhoneNumber = companyRepPhoneNumber;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

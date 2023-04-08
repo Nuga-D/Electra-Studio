@@ -14,17 +14,9 @@ public class UpdateUser {
 
     private String NIN;
 
-    private String companyName;
-
-    private String companyAddress;
-
-    private String companyRegistrationNumber;
-
-    private String companyTaxID;
-
-    private String companyRepPhoneNumber;
-
     private String roles;
+
+    private Company company;
 
     public String getEmail() {
         return email;
@@ -74,46 +66,6 @@ public class UpdateUser {
         this.NIN = NIN;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getCompanyAddress() {
-        return companyAddress;
-    }
-
-    public void setCompanyAddress(String companyAddress) {
-        this.companyAddress = companyAddress;
-    }
-
-    public String getCompanyRegistrationNumber() {
-        return companyRegistrationNumber;
-    }
-
-    public void setCompanyRegistrationNumber(String companyRegistrationNumber) {
-        this.companyRegistrationNumber = companyRegistrationNumber;
-    }
-
-    public String getCompanyTaxID() {
-        return companyTaxID;
-    }
-
-    public void setCompanyTaxID(String companyTaxID) {
-        this.companyTaxID = companyTaxID;
-    }
-
-    public String getCompanyRepPhoneNumber() {
-        return companyRepPhoneNumber;
-    }
-
-    public void setCompanyRepPhoneNumber(String companyRepPhoneNumber) {
-        this.companyRepPhoneNumber = companyRepPhoneNumber;
-    }
-
     public String getRoles() {
         return roles;
     }
@@ -122,11 +74,11 @@ public class UpdateUser {
         this.roles = roles;
     }
 
-    public String getRole() {
-        return roles;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setRole(String roles) {
-        this.roles = roles;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }
