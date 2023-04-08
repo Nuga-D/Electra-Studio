@@ -6,6 +6,7 @@ import com.electra.ElectraRegistrar.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,5 +33,17 @@ public class CompanyService {
 
     public void saveCompany(Company company) {
         companyRepository.save(company);
+    }
+
+    public List<Company> getAllCompanies() {
+        return companyRepository.findAll();
+    }
+
+    public Optional<Company> getCompanyById(Long id) {
+        return companyRepository.findById(id);
+    }
+
+    public void deleteCompanyById(Long id) {
+        companyRepository.deleteById(id);
     }
 }
