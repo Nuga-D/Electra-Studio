@@ -52,8 +52,6 @@ public class ERAuthController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        //UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
-
         String token = jwtTokenProvider.generateToken(authentication);
         return ResponseEntity.ok(new AuthResponse(token));
     }
@@ -71,7 +69,7 @@ public class ERAuthController {
         Role role = roleRepository.findByName(signupRequest.getRole())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         roles.add(role);
-        User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, roles);
+        User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), signupRequest.getCompanyName(), signupRequest.getCompanyAddress(), signupRequest.getCompanyRegistrationNumber(), signupRequest.getCompanyTaxID(), signupRequest.getCompanyRepPhoneNumber(), roles);
         userDetailsServiceImpl.save(user);
 
         return ResponseEntity.ok(new SuccessResponse("User registered successfully!"));

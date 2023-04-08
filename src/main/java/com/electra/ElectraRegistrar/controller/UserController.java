@@ -68,6 +68,14 @@ public class UserController {
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
         user.setEmail(updatedUser.getEmail());
+        user.setHomeAddress(updatedUser.getHomeAddress());
+        user.setPhoneNumber(updatedUser.getPhoneNumber());
+        user.setNIN(updatedUser.getNIN());
+        user.setCompanyName(updatedUser.getCompanyName());
+        user.setCompanyAddress(updatedUser.getCompanyAddress());
+        user.setCompanyRegistrationNumber(updatedUser.getCompanyRegistrationNumber());
+        user.setCompanyTaxID(updatedUser.getCompanyTaxID());
+        user.setCompanyRepPhoneNumber(updatedUser.getCompanyRepPhoneNumber());
         user.setRoles(roles);
         // Update any other fields as needed
 

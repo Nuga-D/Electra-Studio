@@ -9,6 +9,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -22,24 +25,40 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
-    @GenericGenerator(name = "native",strategy = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "user_id")
     private Long id;
 
-//    @NotEmpty(message = "User's first name cannot be empty")
+    @NotEmpty(message = "User's first name cannot be empty")
     private String firstName;
 
-//    @NotEmpty(message = "User's last name cannot be empty")
+    @NotEmpty(message = "User's last name cannot be empty")
     private String lastName;
 
-//    @NotEmpty(message = "User's email cannot be empty.")
-//    @Email(message = "Please enter a valid Email Address")
+    private String homeAddress;
+
+    private String phoneNumber;
+
+    private String NIN;
+
+    private String companyName;
+
+    private String companyAddress;
+
+    private String companyRegistrationNumber;
+
+    private String companyTaxID;
+
+    private String companyRepPhoneNumber;
+
+    @NotEmpty(message = "User's email cannot be empty.")
+    @Email(message = "Please enter a valid Email Address")
     @Column(unique = true)
     private String email;
 
-//    @NotEmpty(message = "User's password cannot be empty.")
-//    @Pattern(regexp="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@.$%^&*-]).{8,}$",message=" Password length must be at least 8; must contain at least 1 uppercase and 1 special character")
+    @NotEmpty(message = "User's password cannot be empty.")
+    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@.$%^&*-]).{8,}$", message = " Password length must be at least 8; must contain at least 1 uppercase and 1 special character")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -48,24 +67,32 @@ public class User {
     private LocalDateTime dateCreated;
 
 
+    @NotEmpty(message = "User's role cannot be empty.")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
-    //    @NotEmpty(message = "User's role cannot be empty.")
-@ManyToMany(fetch = FetchType.LAZY)
-@JoinTable(name = "user_roles",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id"))
-private Set<Role> roles = new HashSet<>();
-
-    public User(String firstName, String lastName, String email, String password, Set<Role> roles) {
+    public User(String firstName, String lastName, String email, String password, String homeAddress, String phoneNumber, String NIN, String companyName, String companyAddress, String companyRegistrationNumber, String companyTaxID, String companyRepPhoneNumber, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.homeAddress = homeAddress;
+        this.phoneNumber = phoneNumber;
+        this.NIN =NIN;
+        this.companyName = companyName;
+        this.companyAddress = companyAddress;
+        this.companyRegistrationNumber = companyRegistrationNumber;
+        this.companyTaxID = companyTaxID;
+        this.companyRepPhoneNumber = companyRepPhoneNumber;
         this.roles = roles;
+
     }
 
 
-    //    @Builder.Default
+//    @Builder.Default
 //    private Boolean disabled = false;
 
     public Long getId() {
@@ -123,6 +150,7 @@ private Set<Role> roles = new HashSet<>();
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
 //    public Boolean getDisabled() {
 //        return disabled;
 //    }
@@ -130,4 +158,68 @@ private Set<Role> roles = new HashSet<>();
 //    public void setDisabled(Boolean disabled) {
 //        this.disabled = disabled;
 //    }
+
+    public String getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(String homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getNIN() {
+        return NIN;
+    }
+
+    public void setNIN(String NIN) {
+        this.NIN = NIN;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyAddress() {
+        return companyAddress;
+    }
+
+    public void setCompanyAddress(String companyAddress) {
+        this.companyAddress = companyAddress;
+    }
+
+    public String getCompanyRegistrationNumber() {
+        return companyRegistrationNumber;
+    }
+
+    public void setCompanyRegistrationNumber(String companyRegistrationNumber) {
+        this.companyRegistrationNumber = companyRegistrationNumber;
+    }
+
+    public String getCompanyTaxID() {
+        return companyTaxID;
+    }
+
+    public void setCompanyTaxID(String companyTaxID) {
+        this.companyTaxID = companyTaxID;
+    }
+
+    public String getCompanyRepPhoneNumber() {
+        return companyRepPhoneNumber;
+    }
+
+    public void setCompanyRepPhoneNumber(String companyRepPhoneNumber) {
+        this.companyRepPhoneNumber = companyRepPhoneNumber;
+    }
 }

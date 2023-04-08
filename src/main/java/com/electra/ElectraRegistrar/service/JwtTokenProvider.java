@@ -1,5 +1,7 @@
 package com.electra.ElectraRegistrar.service;
 
+import com.electra.ElectraRegistrar.models.User;
+import com.electra.ElectraRegistrar.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,18 +30,29 @@ public class JwtTokenProvider {
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
+    @Autowired
+    private UserRepository userRepository;
+
 
 
     public String generateToken(Authentication authentication) {
-        // ...
-
-        //UserDetails userDetails = (UserDetails) authentication.getDetails();
-        //UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
-
-        //String username = userDetails.getUsername();
-
         String username = authentication.getName();
+
+       User user = userRepository.findByEmail(username);
+
+       String firstName = user.getFirstName();
+       String lastName = user.getLastName();
+       String email = user.getEmail();
+       String companyName = user.getCompanyName();
+
+
         Claims claims = Jwts.claims().setSubject(username);
+        claims.put("email", email);
+        claims.put("firstName", firstName);
+        claims.put("lastName", lastName);
+        claims.put("companyName", companyName);
+
+
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + jwtExpiration * 1000);
         return Jwts.builder()
