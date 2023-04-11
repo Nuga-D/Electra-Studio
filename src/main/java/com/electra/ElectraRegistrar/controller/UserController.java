@@ -75,6 +75,7 @@ public class UserController {
         user.setHomeAddress(updatedUser.getHomeAddress());
         user.setPhoneNumber(updatedUser.getPhoneNumber());
         user.setNIN(updatedUser.getNIN());
+        user.setRegisterAs(updatedUser.getRegisterAs());
        user.setCompany(company);
         user.setRoles(roles);
         // Update any other fields as needed

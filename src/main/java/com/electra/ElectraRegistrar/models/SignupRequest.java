@@ -21,6 +21,8 @@ public class SignupRequest {
 
     private String role;
 
+    private String registerAs;
+
     private Company company;
 
     public String getEmail() {
@@ -93,5 +95,13 @@ public class SignupRequest {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public String getRegisterAs() {
+        return registerAs;
+    }
+
+    public void setRegisterAs(String registerAs) {
+        this.registerAs = registerAs;
     }
 }

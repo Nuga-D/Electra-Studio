@@ -16,6 +16,8 @@ public class UpdateUser {
 
     private String roles;
 
+    private String registerAs;
+
     private Company company;
 
     public String getEmail() {
@@ -80,5 +82,13 @@ public class UpdateUser {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public String getRegisterAs() {
+        return registerAs;
+    }
+
+    public void setRegisterAs(String registerAs) {
+        this.registerAs = registerAs;
     }
 }

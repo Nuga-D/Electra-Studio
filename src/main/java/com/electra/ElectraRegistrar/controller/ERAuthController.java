@@ -80,24 +80,33 @@ public class ERAuthController {
 
         Set<Role> roles = new HashSet<>();
 
-        Role role = roleRepository.findByName(signupRequest.getRole())
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        if (signupRequest.getRole() == null) {
+            String defaultRole = "USER";
+            Role role = roleRepository.findByName(defaultRole)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
-        roles.add(role);
+            roles.add(role);
+        } else {
+            Role role = roleRepository.findByName(signupRequest.getRole())
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+            roles.add(role);
+        }
+
 
         if (userDetailsServiceImpl.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity.badRequest().body(new ErrorResponse("Username is already taken!"));
         } else if (companyService.companyExists(companyName)) {
             // company already exists, create user with existing company
             Company existingCompany = companyService.findByName(companyName).get();
-            User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), existingCompany, roles);
+            User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), signupRequest.getRegisterAs(), existingCompany, roles);
             userDetailsServiceImpl.save(user);
             return ResponseEntity.ok(new SuccessResponse("User registered successfully"));
         } else {
             // company does not exist, create new company and user
             Company newCompany = new Company(companyName, companyAddress, companyRegNo, companyTaxID, companyRepPhoneNo);
             companyService.saveCompany(newCompany);
-            User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), newCompany, roles);
+            User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), signupRequest.getRegisterAs(), newCompany, roles);
             userDetailsServiceImpl.save(user);
             return ResponseEntity.ok(new SuccessResponse("User and company registered successfully"));
         }

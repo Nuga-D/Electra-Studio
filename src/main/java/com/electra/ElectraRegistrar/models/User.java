@@ -14,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +25,7 @@ import java.util.Set;
 @Table(name = "Users")
 public class User {
 
-    public User(String firstName, String lastName, String email, String password, String homeAddress, String phoneNumber, String NIN, Company company, Set<Role> roles) {
+    public User(String firstName, String lastName, String email, String password, String homeAddress, String phoneNumber, String NIN, String registerAs, Company company, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -34,6 +35,7 @@ public class User {
         this.NIN =NIN;
         this.roles = roles;
         this.company = company;
+        this.registerAs = registerAs;
 
     }
 
@@ -54,6 +56,8 @@ public class User {
     private String phoneNumber;
 
     private String NIN;
+
+    private String registerAs;
 
     @NotEmpty(message = "User's email cannot be empty.")
     @Email(message = "Please enter a valid Email Address")
@@ -179,5 +183,13 @@ public class User {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public String getRegisterAs() {
+        return registerAs;
+    }
+
+    public void setRegisterAs(String registerAs) {
+        this.registerAs = registerAs;
     }
 }
