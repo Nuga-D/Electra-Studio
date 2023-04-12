@@ -64,23 +64,16 @@ public class ERAuthController {
     @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/signup")
     public ResponseEntity registerUser(@RequestBody SignupRequest signupRequest) {
-        Company company = signupRequest.getCompany();
 
-        String companyName = company.getName();
-
-        String companyAddress = company.getAddress();
-
-        String companyRegNo = company.getRegistrationNumber();
-
-        String companyTaxID = company.getTaxID();
-
-        String companyRepPhoneNo = company.getRepresentativePhoneNo();
+        String registerAs = signupRequest.getRegisterAs();
 
         String hashPwd = passwordEncoder.encode(signupRequest.getPassword());
 
         Set<Role> roles = new HashSet<>();
 
-        if (signupRequest.getRole() == null) {
+        if (userDetailsServiceImpl.existsByEmail(signupRequest.getEmail())) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("Username is already taken!"));
+        } else if (signupRequest.getRole() == null) {
             String defaultRole = "USER";
             Role role = roleRepository.findByName(defaultRole)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -93,10 +86,21 @@ public class ERAuthController {
             roles.add(role);
         }
 
+        if (registerAs.matches("company")) {
 
-        if (userDetailsServiceImpl.existsByEmail(signupRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new ErrorResponse("Username is already taken!"));
-        } else if (companyService.companyExists(companyName)) {
+            Company company = signupRequest.getCompany();
+
+            String companyName = company.getName();
+
+            String companyAddress = company.getAddress();
+
+            String companyRegNo = company.getRegistrationNumber();
+
+            String companyTaxID = company.getTaxID();
+
+            String companyRepPhoneNo = company.getRepresentativePhoneNo();
+
+         if (companyService.companyExists(companyName)) {
             // company already exists, create user with existing company
             Company existingCompany = companyService.findByName(companyName).get();
             User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), signupRequest.getRegisterAs(), existingCompany, roles);
@@ -109,6 +113,11 @@ public class ERAuthController {
             User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), signupRequest.getRegisterAs(), newCompany, roles);
             userDetailsServiceImpl.save(user);
             return ResponseEntity.ok(new SuccessResponse("User and company registered successfully"));
+        }} else {
+            User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), hashPwd, signupRequest.getHomeAddress(), signupRequest.getPhoneNumber(), signupRequest.getNIN(), signupRequest.getRegisterAs(), roles);
+            userDetailsServiceImpl.save(user);
+            return ResponseEntity.ok(new SuccessResponse("User registered successfully"));
+
         }
 
     }

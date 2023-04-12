@@ -39,6 +39,18 @@ public class User {
 
     }
 
+    public User(String firstName, String lastName, String email, String password, String homeAddress, String phoneNumber, String NIN, String registerAs, Set<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.homeAddress = homeAddress;
+        this.phoneNumber = phoneNumber;
+        this.NIN =NIN;
+        this.roles = roles;
+        this.registerAs = registerAs;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -84,6 +96,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+
 
 
 //    @Builder.Default

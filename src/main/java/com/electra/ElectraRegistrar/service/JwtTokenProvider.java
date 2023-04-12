@@ -35,24 +35,28 @@ public class JwtTokenProvider {
     private UserRepository userRepository;
 
 
-
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
 
-       User user = userRepository.findByEmail(username);
+        User user = userRepository.findByEmail(username);
 
-       String firstName = user.getFirstName();
-       String lastName = user.getLastName();
-       String email = user.getEmail();
-       Company company = user.getCompany();
-       String companyName = company.getName();
+        String firstName = user.getFirstName();
+        String lastName = user.getLastName();
+        String email = user.getEmail();
+        Company company = user.getCompany();
+
 
 
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("email", email);
         claims.put("firstName", firstName);
         claims.put("lastName", lastName);
-        claims.put("companyName", companyName);
+        if ((company == null)) {
+            claims.put("companyName", null);
+        } else {
+            String companyName = company.getName();
+            claims.put("companyName", companyName);
+        }
 
 
         Date now = new Date();
