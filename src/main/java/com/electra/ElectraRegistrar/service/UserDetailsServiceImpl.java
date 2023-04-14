@@ -1,5 +1,6 @@
 package com.electra.ElectraRegistrar.service;
 
+import com.electra.ElectraRegistrar.models.Company;
 import com.electra.ElectraRegistrar.models.Role;
 import com.electra.ElectraRegistrar.models.User;
 import com.electra.ElectraRegistrar.repository.UserRepository;
@@ -56,6 +57,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public void deleteUserById(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public List<User> loadUsersByCompany(Company company) {
+        return userRepository.findByCompany(company);
     }
 
 }

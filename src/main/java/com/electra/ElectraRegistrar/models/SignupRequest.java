@@ -13,7 +13,17 @@ public class SignupRequest {
 
     private String lastName;
 
+    private String homeAddress;
+
+    private String phoneNumber;
+
+    private String NIN;
+
     private String role;
+
+    private String registerAs;
+
+    private Company company;
 
     public String getEmail() {
         return email;
@@ -47,11 +57,51 @@ public class SignupRequest {
         this.lastName = lastName;
     }
 
+    public String getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(String homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getNIN() {
+        return NIN;
+    }
+
+    public void setNIN(String NIN) {
+        this.NIN = NIN;
+    }
+
     public String getRole() {
         return role;
     }
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public String getRegisterAs() {
+        return registerAs;
+    }
+
+    public void setRegisterAs(String registerAs) {
+        this.registerAs = registerAs;
     }
 }

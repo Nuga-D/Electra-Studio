@@ -59,15 +59,24 @@ public class UserController {
         User user = userOptional.get();
 
         Set<Role> roles = new HashSet<>();
-        Role role = roleRepository.findByName(updatedUser.getRole())
+
+        Role role = roleRepository.findByName(updatedUser.getRoles())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
         roles.add(role);
+
+        Company company = updatedUser.getCompany();
 
 
         // Update the user fields
         user.setFirstName(updatedUser.getFirstName());
         user.setLastName(updatedUser.getLastName());
         user.setEmail(updatedUser.getEmail());
+        user.setHomeAddress(updatedUser.getHomeAddress());
+        user.setPhoneNumber(updatedUser.getPhoneNumber());
+        user.setNIN(updatedUser.getNIN());
+        user.setRegisterAs(updatedUser.getRegisterAs());
+        user.setCompany(company);
         user.setRoles(roles);
         // Update any other fields as needed
 

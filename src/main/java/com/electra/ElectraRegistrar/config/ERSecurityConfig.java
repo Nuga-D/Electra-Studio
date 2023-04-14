@@ -48,6 +48,7 @@ public class ERSecurityConfig extends AuthenticationConfiguration {
                 .antMatchers( "/auth/signup", "/auth/signin").permitAll()
                 .antMatchers( "/roles/addRole", "/roles/getRoles").permitAll()
                 .antMatchers( "/users/allUsers", "/users/{id}", "/users/update-password").permitAll()
+                .antMatchers("/companies/addCompany", "/companies/allCompanies", "/companies/{id}").permitAll()
                 .and()
                 .formLogin()
                 .and()
