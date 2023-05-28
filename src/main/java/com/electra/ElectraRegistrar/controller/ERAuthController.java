@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-//@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 @RestController
 @RequestMapping("/auth")
 public class ERAuthController {
@@ -47,7 +47,7 @@ public class ERAuthController {
     @Autowired
     private CompanyService companyService;
 
-    @CrossOrigin(origins = "https://etaxpayer-syntechsysworld.vercel.app/session/signin", allowedHeaders = "POST", methods = {RequestMethod.GET, RequestMethod.POST})
+    @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/signin")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginForm) {
         String username = loginForm.getUsername();
@@ -61,7 +61,7 @@ public class ERAuthController {
     }
 
 
-    @CrossOrigin(origins = "https://etaxpayer-syntechsysworld.vercel.app/session/signup", allowedHeaders = "POST", methods = {RequestMethod.GET, RequestMethod.POST})
+    @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST})
     @PostMapping("/signup")
     public ResponseEntity registerUser(@RequestBody SignupRequest signupRequest) {
 
